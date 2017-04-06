@@ -1,11 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
     // Entry File Directory
-	context: path.resolve(__dirname, './src'),
+    context: path.resolve(__dirname, './src'),
 	entry: {
-		app: './index.js',
+		app: './index.jsx',
 		//	For multiple entry points to be bundled in array order:
 		/*
 		 	entry: {
@@ -39,7 +40,7 @@ module.exports = {
 			},
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
+                loader: ['babel-loader', 'eslint-loader'],
                 exclude: /node_modules/,
             },
             {
@@ -50,6 +51,13 @@ module.exports = {
         ]
     },
     plugins: [
+        new StyleLintPlugin({
+            configfile: '.stylelintrc',
+            context: 'src',
+            files: '**/*.scss',
+            failOnError: false,
+            quiet: false
+        }),
         new HtmlWebpackPlugin({
             template: './index.html',
             filename: 'index.html',
